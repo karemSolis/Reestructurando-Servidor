@@ -75,7 +75,7 @@ const initializaPassport = () => {
 
 
 
-    passport.use('guthub', new GitHubStrategy({
+    passport.use('github', new GitHubStrategy({
         clientID:"Iv1.1cce9042759205e6",
         clientSecret:"55cba09e950e60866f15958e3886d68b8f1a9596",
         callbackURL:"http://localhost:8080/api/sessions/githubcallback" //se puede poner cualquier url mientras que corresponda al localhost8080 que es el puerto que estamos usando
@@ -90,9 +90,9 @@ const initializaPassport = () => {
                     last_name: "github",
                     age:20,
                     email:profile.__json.email,
-                    rol: "Usuario",
+                    rol: "admin",
                     password:"",
-          
+
                 }
 
                 let result = await usersManager.addUser(newUser)

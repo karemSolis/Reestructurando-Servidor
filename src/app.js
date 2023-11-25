@@ -76,7 +76,8 @@ app.use(passport.session())
 app.use("/api/productos", productRouter) /*ESTABLECE UNA RUTA BASE Y LA ASOCIA CON EL ENRUTADOR PRODUCTROUTER, CUANDO UNA SOLICITUD  LLEGA A UNA RUTA
 COMIENZACON /api/productS Y EXPRESS REDIGIRÁ LA SOLICITUD AL ENRUTADOR PARA PROCESARLO.*/
 app.use("/api/carritos", CartRouter); /*ESTABLECE UNA RUTA BASE Y REDIRIGE A CARTROUTES*/
-app.use("/api/sessions",  userRouter)/*ESTABLECE UNA RUTA BASE Y REDIRIGE A USERROUTES*/
+
+app.use("/api/sessions", userRouter)/*ESTABLECE UNA RUTA BASE Y REDIRIGE A USERROUTES*/
 
 //HANDLEBARS
 app.engine("handlebars", engine());  /*acá le digo al servidor que usaremos M.P.handlebars para el uso de express y que será a
@@ -135,7 +136,7 @@ app.get("/carts", async (req, res) => {
 
 app.get("/login", (req, res) => {
   // Renderiza la vista de inicio de sesión
-  res.render("login", {
+  res.render("./login", {
     title: "Iniciar Sesión"
   });
 });

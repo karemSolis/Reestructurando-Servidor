@@ -94,13 +94,11 @@ userRouter.get("/logout", (req, res) => { //En este caso, "/logout" es una ruta 
 
 //-------------------------------------------
 
-userRouter.get("/api/sessions/github", passport.authenticate("github", { scope: ["user:email"] }), async (req, res) => {
-    console.log("Iniciando autenticación de GitHub..."); // Agregado para depuración
+userRouter.get("/github", passport.authenticate("github", { scope: ["user:email"] }), async (req, res) => {
+
 });
 
 userRouter.get("/githubcallback", passport.authenticate("github", { failureRedirect: "/login" }), async (req, res) => {
-    console.log("Callback de autenticación de GitHub..."); // Agregado para depuración
-    console.log("Usuario autenticado:", req.user); // Agregado para depuración
     req.session.user = req.user;
     req.session.emailUsuario = req.session.user.email
     req.session.rolUsuario = req.session.user.rol

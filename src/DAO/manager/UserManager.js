@@ -49,7 +49,7 @@ class UserManager {
     }
 
 
-//obtiene a todos los usuarios 
+    //obtiene a todos los usuarios 
     async getUsers() {
         try {
             const users = await this.userModel.find({});
@@ -61,11 +61,11 @@ class UserManager {
         }
     }
 
-//obtienen usuario por su id 
+    //obtienen usuario por su id 
     async getUserById(id) {
         try {
             const user = await this.userModel.findById(id).lean();
-            
+
             if (!user) {
 
                 return 'Usuario no encontrado';
@@ -78,7 +78,7 @@ class UserManager {
         }
     }
 
-//borra usuario por su id 
+    //borra usuario por su id 
     async deleteUser(id) {
         try {
             const user = await this.userModel.findById(id);
@@ -96,57 +96,31 @@ class UserManager {
         }
     }
 
-    /*async validateUser(email) {
-        
-        try {
-            console.log("Buscando usuario con email:", email);
-            let user;
-    
-            if (typeof email === 'object') {
-                user = await this.userModel.findOne(email); //saqué el const user porq ya había declarado la variable en let user 
-                console.log("Usuario encontrado:", user);
-            } else if (typeof email === 'string') {
-                user = await this.userModel.findOne({ email }); //saqué el const user porq ya había declarado la variable en let user 
-                console.log("Usuario encontrado:", user);
-            } else {
-                throw new Error('Formato de email no válido');
-            }
-    
-            if (!user) {
-                return 'No se encuentra usuario';
-            }
-    
-            return user;
-        } catch (error) {
-            console.error('Error al validar usuario:', error);
-            return 'Error al validar usuario: ' + error.message;
-        }
-    }*/
     async findUser(email) {
         try {
-          const user = await this.userModel.findOne({ email }, { email: 1, first_name: 1, last_name: 1, password: 1, rol:1 });
-      
-          if (!user) {
-            return "Usuario no encontrado";
-          }
-      
-          return user;
-        } catch (error) {
-          console.error('Error al validar usuario', error);
-          return 'Error al obtener el usuario';
-        }
-      }
+            const user = await this.userModel.findOne({ email }, { email: 1, first_name: 1, last_name: 1, password: 1, rol: 1 });
 
-      async findEmail(param) {
-        try {
-          const user = await this.userModel.findOne(param)    
-          return user
+            if (!user) {
+                return "Usuario no encontrado";
+            }
+
+            return user;
         } catch (error) {
-          console.error('Error al validar usuario', error);
-          return 'Error al obtener el usuario';
+            console.error('Error al validar usuario', error);
+            return 'Error al obtener el usuario';
         }
-      }
-    
+    }
+
+    async findEmail(param) {
+        try {
+            const user = await this.userModel.findOne(param)
+            return user
+        } catch (error) {
+            console.error('Error al validar usuario', error);
+            return 'Error al obtener el usuario';
+        }
+    }
+
 
 }
 
