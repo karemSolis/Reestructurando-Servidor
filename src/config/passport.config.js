@@ -74,38 +74,90 @@ const initializaPassport = () => {
 }));
 
 
-
-    passport.use('github', new GitHubStrategy({
-        clientID:"Iv1.1cce9042759205e6",
-        clientSecret:"55cba09e950e60866f15958e3886d68b8f1a9596",
-        callbackURL:"http://localhost:8080/api/sessions/githubcallback" //se puede poner cualquier url mientras que corresponda al localhost8080 que es el puerto que estamos usando
+ //_________________ESTRATEGIA DE AUTENTIFICACIÓN DE PASSPORT-GITHUB (GitHubStrategy)________________
+         ////Configuración de Passport-GitHub:
+     passport.use('github', new GitHubStrategy({ //establece una estrategia de autentificación con el nombre github y crea una nueva instancia de la estrategia de aut.de github
+         clientID:"Iv1.1cce9042759205e6", //identificador único de tu app en github
+         clientSecret:"ec77c739b76d5d416dd4393f2a970bcdbe1406a3", //clave secreta asociada a mi app de github
+         callbackURL:"http://localhost:8080/api/sessions/githubcallback" //la URL a la que GitHub redirigirá después de que un usuario haya autenticado con éxito. //se puede poner cualquier url mientras que corresponda al localhost8080 que es el puerto que estamos usando
         
-    }, async(accessToken, refreshToken, profile, done)=>{
-        try {
-            console.log(profile)
-            let user = await usersManager.findEmail({email:profile.__json.email})
-            if(!user){
-                let newUser = {
-                    first_name: profile.__json.login,
-                    last_name: "github",
-                    age:20,
-                    email:profile.__json.email,
-                    rol: "admin",
-                    password:"",
+         ////Manejo de la autenticación:
+     }, async(accessToken, refreshToken, profile, done)=>{ //lA FIRMA DE LA FUNCIÓN//es una función asincrónica que maneja la autenticación una vez que GitHub ha devuelto la información del perfil del usuario.
+         //accesToken: token de acceso utilizado para realizar acciones en nombre del usuario autentificado, en el contexto de github este token permite a la app realizar operaciones en la cuenta del usuario que ha iniciado sesión.
+         //refreshToken: token parobteber un nuevo accessToken cuando el actual expira.
+         //profile: objeto que contiene la información del perfil del usuario obtenida en github, el profile.__json.email se usa para acceder al correo electrónico del usuario.
+         //done:se utiliza para indicar a passport si la utentificación fue exitosa y proporcionar información sobre el usuario autentificado. 
+         try {
+             console.log(profile)
+         ////Verificación del Usuario:
+             let user = await usersManager.findEmail({ email: profile.__json.email }) //busca en la base de datos si ya existe un usuario con la dirección de correo electrónico proporcionada por GitHub.
+             if(!user){ //si usuario no existe 
+         ////Creación de un Nuevo Usuario:
+                 let newUser = { //vamos a crear un nuevo usuario 
+                     first_name: profile.__json.name,
+                     last_name: "github",
+                     age:20,
+                     email:profile.__json.email,
+                     rol: "admin", //cuando pongo usuario no abre con el botón "ingresar con github"?
+                     password:"",
 
-                }
+                 }
 
-                let result = await usersManager.addUser(newUser)
-                done(null,result)
-            }
-            else{
-                done(null, user)
-            }
-        } catch (error) {
-            return done(error)
+                 let result = await usersManager.addUser(newUser) //agrega el nuevo usuario a la base de datos.
+                 done(null,result) //indica que la autenticación ha tenido éxito y proporciona el resultado (el nuevo usuario) a Passport.
+             }
+         ////Manejo de Errores:
+             else{
+                 done(null, user)
+             }
+         } catch (error) {
+             return done(error)
+         }
+    }))
+
+/*
+passport.use('github', new GitHubStrategy({ 
+    clientID: "Iv1.1cce9042759205e6", 
+    clientSecret: "ec77c739b76d5d416dd4393f2a970bcdbe1406a3",
+    callbackURL: "http://localhost:8080/api/sessions/githubcallback"
+}, async (accessToken, refreshToken, profile, done) => { 
+    try {
+        const userEmail = profile?.__json?.email;
+
+        if (!userEmail) {
+            // Manejar la falta de correo electrónico en el perfil de GitHub
+            console.log("El perfil de GitHub no tiene la propiedad 'email'");
+            return done(new Error("No se proporciona un correo electrónico en el perfil de GitHub"));
         }
+
+        let user = await usersManager.findEmail({ email: userEmail });
+
+        if (!user) { 
+            console.log(profile);
+
+            let newUser = { 
+                first_name: profile.__json.login,
+                last_name: "github",
+                age: 20,
+                email: userEmail,
+                rol: "admin", 
+                password: "",
+            }
+
+            let result = await usersManager.addUser(newUser);
+            done(null, result);
+        } else {
+            done(null, user);
+        }
+    } catch (error) {
+        return done(error);
     }
-    ))
+}));
+*/
+
+
+
 }
 
 export default initializaPassport
+

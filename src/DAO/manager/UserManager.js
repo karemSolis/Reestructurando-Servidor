@@ -24,9 +24,11 @@ class UserManager {
             return 'Error al crear el usuario';
         }
     }
-
-
-
+    async isValidPassword(user, password) {
+        return isValidPassword(user, password);
+    }
+    
+    
 
     //actualiza al usuario que ya existe en la base de datos 
     async updateUser(id, updatedUser) {
@@ -114,7 +116,8 @@ class UserManager {
     async findEmail(param) {
         try {
             const user = await this.userModel.findOne(param)
-            return user
+            console.log('Usuario encontrado:', user);
+            return user;
         } catch (error) {
             console.error('Error al validar usuario', error);
             return 'Error al obtener el usuario';

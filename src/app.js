@@ -14,6 +14,7 @@ import UserManager from "./DAO/manager/UserManager.js";
 import userRouter from "./router/users.routes.js";
 import productRouter from "./router/product.routes.js";
 import CartRouter from "./router/cart.routes.js";
+import jwtEstrategy from "./router/jwt.routes.js";
 
 import initializaPassport from "./config/passport.config.js"; 
 import __dirname from "./utils.js"; 
@@ -73,11 +74,10 @@ app.use(passport.session())
 
 
 //ENRUTADORES. 
-app.use("/api/productos", productRouter) /*ESTABLECE UNA RUTA BASE Y LA ASOCIA CON EL ENRUTADOR PRODUCTROUTER, CUANDO UNA SOLICITUD  LLEGA A UNA RUTA
-COMIENZACON /api/productS Y EXPRESS REDIGIRÁ LA SOLICITUD AL ENRUTADOR PARA PROCESARLO.*/
+app.use("/api/productos", productRouter) 
 app.use("/api/carritos", CartRouter); /*ESTABLECE UNA RUTA BASE Y REDIRIGE A CARTROUTES*/
-
 app.use("/api/sessions", userRouter)/*ESTABLECE UNA RUTA BASE Y REDIRIGE A USERROUTES*/
+app.use("/api/jwt", jwtEstrategy)
 
 //HANDLEBARS
 app.engine("handlebars", engine());  /*acá le digo al servidor que usaremos M.P.handlebars para el uso de express y que será a

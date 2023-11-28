@@ -29,7 +29,7 @@ userRouter.get("/failformRegister",async(req,res)=>{
 })
 
 
-userRouter.post("/login", passport.authenticate('login',{failureRedirect:'/faillogin'}), async (req, res) => { //MODIFIQUÉ ACÁ REF.LOGIN
+userRouter.post("/login", passport.authenticate('login',{failureRedirect:'/faillogin'}), async (req, res) => {
     try 
      {
         if(!req.user) return res.status(400).send({status:"error", error: "Credenciales no validas"})
